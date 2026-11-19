@@ -1,0 +1,4 @@
+wallust
+ttf-rajdhani
+ttf-oxanium
+neofetch

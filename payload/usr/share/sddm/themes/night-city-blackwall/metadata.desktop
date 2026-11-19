@@ -1,0 +1,11 @@
+[SddmGreeterTheme]
+Name=Night City Blackwall
+Description=Cyberpunk street-tech SDDM login theme
+Author=Cyberpunk-Theme
+License=GPL-3.0
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=night-city-blackwall
+Theme-API=2.0
