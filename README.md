@@ -1,4 +1,4 @@
-# Cyberpunk Desktop Installer
+<h1 align="center">Cyberpunk Desktop Installer<sub>Beta</sub></h1>
 
 A curated Arch Linux x86_64 installer for the Cyberpunk Hyprland desktop configuration included in `payload/`. It deploys the supplied Hyprland, Waybar, Wofi, Dunst, Kitty, GTK, icon/cursor, wallpaper, XDG portal, and SDDM-theme files, and installs the packages listed in the manifests.
 
@@ -18,6 +18,41 @@ This is a desktop configuration installer, **not** an Arch OS installer or disk-
 - Backups are retained. Do not delete them until the installed system has been checked and recovery is no longer needed.
 
 The source checks and isolated recovery/Bash-integration tests run in the review environment. **No live package installation, clean-machine boot, Hyprland session, SDDM rendering, or hardware test has been performed.** Do not interpret passing static tests as a guarantee of runtime compatibility.
+
+
+## Screenshots
+
+Have a look at CyberPunk Desktop interface and features through the screenshots below.
+
+### Sddm Login
+
+![Sddm login Interface](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/sddm_login.png)
+
+
+### Main Desktop
+
+![Main Desktop Interface](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/main_desktop.png)
+
+
+### Woffi application launcher
+
+![Woffi application launcher](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/woffi-application_launcher.png)
+
+
+
+### Terminal looks
+- [About neochange](#details)
+
+![Terminal looks](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/terminal+neochange+neofetch.png)
+
+
+
+### Terminal looks x2
+- [About changewall](#details)
+
+![Terminal looks](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/theme+waybar+colors_change_with_changewall.png)
+
+
 
 ## Requirements
 
@@ -66,6 +101,19 @@ The bundle includes four prebuilt Arch package archives. Their SHA-256 hashes ar
 ## Rebuilding bundled packages
 
 The optional dependency builder needs additional Rajdhani recipe/license inputs that are not included in this archive. See [docs/BUILD-DEPENDENCIES.md](docs/BUILD-DEPENDENCIES.md) before using it.
+
+
+## Details
+
+- You can change your distro logo (neofetch only now) using `neochange`
+  ```bash
+  neochange path/to/image
+  ```
+- You can change your wallpaper + waybar + desktop theme (based on your wallpaper) using `changewall`
+  ```bash
+  changewall path/to/image
+  ```
+
 
 ## Project layout
 
