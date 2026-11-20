@@ -20,7 +20,8 @@ This is a desktop configuration installer, **not** an Arch OS installer or disk-
 The source checks and isolated recovery/Bash-integration tests run in the review environment. **No live package installation, clean-machine boot, Hyprland session, SDDM rendering, or hardware test has been performed.** Do not interpret passing static tests as a guarantee of runtime compatibility.
 
 
-## Screenshots
+
+## Screenshots (Using <a href="https://github.com/zaynkhan100110/CyberShot">CyberShot</a>)
 
 Have a look at CyberPunk Desktop interface and features through the screenshots below.
 
