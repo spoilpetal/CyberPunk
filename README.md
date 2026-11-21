@@ -1,131 +1,416 @@
-<h1 align="center">Cyberpunk Desktop Installer<sub>Beta</sub></h1>
 
-A curated Arch Linux x86_64 installer for the Cyberpunk Hyprland desktop configuration included in `payload/`. It deploys the supplied Hyprland, Waybar, Wofi, Dunst, Kitty, GTK, icon/cursor, wallpaper, XDG portal, and SDDM-theme files, and installs the packages listed in the manifests.
+<h1 align="center">CyberPunk</h1>
 
-This is a desktop configuration installer, **not** an Arch OS installer or disk-reset utility. It does not partition disks, format filesystems, install a bootloader, or reinstall Arch.
+A curated Arch Linux desktop configuration installer that deploys the CyberPunk desktop environment and its associated tools.
 
-## Safety and current validation status
+**Status:** Beta Release
 
-- `--plan` is the default and does not install packages or deploy files.
-- `--apply` requires the exact confirmation `YES` and sudo authorization.
-- Existing managed destination files are backed up before package transactions.
-- The installer adds or updates one clearly delimited managed block in `~/.bashrc` to source the Cyberpunk prompt. Other `.bashrc` content is preserved. The original `.bashrc` is backed up and can be restored.
-- Existing files at payload destinations are backed up before replacement. Unrelated files and user documents are not targeted.
-- The installer deploys the included Hyprland configuration; it does not merge arbitrary changes into that configuration file.
-- SDDM theme assets are copied. During `--apply`, the installer explicitly asks whether to enable `sddm.service` at boot. The default is No; declining leaves the current service state unchanged. Choosing Yes runs `sudo systemctl enable sddm.service` after file deployment. It does not start or restart SDDM in the current session.
-- Package changes are not reversed by file recovery.
-- Recovery uses exact journal/state coverage, original-backup checksum verification, deployment progress, restoration progress, and a complete conflict preflight before changing destinations.
-- Backups are retained. Do not delete them until the installed system has been checked and recovery is no longer needed.
+CyberPunk automates the setup of a customized desktop environment built around Hyprland, Waybar, Wofi, Dunst, Kitty, GTK themes, icons, cursors, wallpapers, XDG portals, and an SDDM login theme.
 
-The source checks and isolated recovery/Bash-integration tests run in the review environment. **No live package installation, clean-machine boot, Hyprland session, SDDM rendering, or hardware test has been performed.** Do not interpret passing static tests as a guarantee of runtime compatibility.
+---
 
+## ⚠️ Important Installation Notice
 
+> **This installer is intended ONLY for a fresh Arch Linux installation.**
 
-## Screenshots (Using <a href="https://github.com/zaynkhan100110/CyberShot">CyberShot</a>)
+The recommended starting point is:
 
-Have a look at CyberPunk Desktop interface and features through the screenshots below.
+- A fresh Arch Linux installation using a pure TTY environment, or
+- A fresh Arch Linux installation with a minimal Hyprland setup.
 
-### Sddm Login
+**Do not run this installer on an existing, customized desktop installation.**
 
-![Sddm login Interface](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/sddm_login.png)
+The installer installs Hyprland and its associated desktop components, then deploys CyberPunk configuration files to their designated system and user locations. Existing files at those managed destinations may be replaced.
 
+Although the installer creates backups of managed files, those backups do not make it suitable for preserving an existing customized desktop environment.
+
+### Supported system
+
+- Arch Linux x86_64.
+- Fresh installation recommended.
+- Other Arch-based distributions and derivatives have not been tested and are not officially supported.
+
+This project is a desktop configuration installer, **not an operating system installer**. It does not partition disks, format drives, install a bootloader, or reinstall Arch Linux.
+
+---
+
+## Screenshots
+
+The following screenshots show CyberPunk running on the developer's own Arch Linux system.
+
+### SDDM Login Screen
+
+![CyberPunk SDDM Login Screen](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/sddm_login.png)
 
 ### Main Desktop
 
-![Main Desktop Interface](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/main_desktop.png)
+![CyberPunk Main Desktop](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/main_desktop.png)
 
+### Application Launcher
 
-### Woffi application launcher
+![Wofi Application Launcher](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/woffi-application_launcher.png)
 
-![Woffi application launcher](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/woffi-application_launcher.png)
+### Terminal, neochange and Neofetch
 
+![Terminal with neochange and Neofetch](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/terminal+neochange+neofetch.png)
 
+### Dynamic Wallpaper and Waybar Theme
 
-### Terminal looks
-- [About neochange](#details)
+![Changewall dynamic wallpaper and Waybar theme](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/theme+waybar+colors_change_with_changewall.png)
 
-![Terminal looks](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/terminal+neochange+neofetch.png)
+Screenshots were captured using [CyberShot](https://github.com/zaynkhan100110/CyberShot).
 
+---
 
+## Features
 
-### Terminal looks x2
-- [About changewall](#details)
+- Automated Hyprland desktop environment setup.
+- Waybar configuration and styling.
+- Wofi application launcher.
+- Dunst notification daemon configuration.
+- Kitty terminal configuration.
+- GTK themes, icons, and cursor themes.
+- Wallpaper configuration.
+- Dynamic wallpaper and Waybar color customization through `changewall`.
+- Terminal logo customization through `neochange`.
+- XDG desktop portal configuration.
+- SDDM login screen theme deployment.
+- Package installation through Pacman.
+- Managed file backups before deployment.
+- Installation planning mode.
+- Installation recovery support.
+- Deployment and restoration tracking.
 
-![Terminal looks](https://raw.githubusercontent.com/spoilpetal/Picture_Vault/main/CyberPunk/theme+waybar+colors_change_with_changewall.png)
-
-
+---
 
 ## Requirements
 
-- Arch Linux x86_64 (the bundled Wallust package is x86_64-specific)
-- A normal non-root user account with working `sudo`
-- Bash, `pacman`, `pacman-conf`, `sha256sum`, `flock`, `find`, `awk`, `sort`, `stat`, `sync`, `grep`, and standard GNU utilities
-- A network connection for official repository package installation
-- Hyprland 0.55 or newer (the supplied `hyprland.lua` uses Hyprland's Lua configuration interface)
-- The package set in `packages/official.txt` and the four bundled archives in `dist/dependencies/`
+Before running the installer, make sure you have:
 
-The installer can be launched from a TTY. The graphical experience itself requires a working Hyprland session and compatible graphics/input hardware. The portal configuration uses GTK as the generic/file-chooser backend and Hyprland for screenshot/screencast requests. Hyprland sets the Wayland desktop/session variables before compositor initialization, allowing its default D-Bus/systemd environment integration to propagate them. Included shortcuts: `SUPER+SHIFT+C` captures a selected region to `~/Pictures/Screenshots` and the clipboard; `SUPER+B` toggles Waybar; `SUPER+M` exits Hyprland.
+- A fresh Arch Linux x86_64 installation.
+- A normal user account with `sudo` privileges.
+- An active internet connection.
+- Standard Arch Linux command-line utilities.
+- Sufficient disk space for the desktop components and dependencies.
 
-## Review and install
+The included configuration targets Hyprland 0.55 or newer.
 
-From the extracted project directory:
+The package list is maintained in:
+
+```text
+packages/official.txt
+```
+
+Bundled dependencies are stored in:
+
+```text
+dist/dependencies/
+```
+
+The included XDG portal configuration covers GTK file chooser integration and Hyprland screenshot/screencast functionality.
+
+---
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/spoilpetal/CyberPunk.git
+cd CyberPunk
+```
+
+### 2. Verify the installation files
 
 ```bash
 ./scripts/verify.sh
+```
+
+### 3. Review the installation plan
+
+The installer uses planning mode by default. This does not apply system changes.
+
+```bash
 ./scripts/install.sh --plan
 ```
 
-Review the complete package/file counts and target paths. The installer replaces files at the exact paths under `payload/home/` and `payload/usr/`; those existing files are backed up first. It also manages the prompt block in `.bashrc`. The apply phase uses `pacman -Syu`, so it performs a full system upgrade as well as installing the listed official packages. Pacman retains its own transaction prompts; review them before accepting. The installer then asks `Enable SDDM at boot? [y/N]`; answer `y` to enable the login manager for future boots or press Enter/answer `n` to leave its current state unchanged. An invalid or unanswered choice stops before installation changes.
+Review the planned operations and deployment destinations before proceeding.
 
-Only after reviewing the plan on the target machine, run apply:
+Pay particular attention to files under:
+
+```text
+payload/home/
+payload/usr/
+```
+
+### 4. Apply the installation
 
 ```bash
 ./scripts/install.sh --apply
 ```
 
-Do not run the installer as root. Do not run it while another installer or recovery operation is active. Keep the project archive and generated backup directory until the desktop has been checked.
+The installer requires the exact confirmation:
 
-## Recovery
-
-Read [docs/RESTORE.md](docs/RESTORE.md). Inspect first:
-
-```bash
-./scripts/restore.sh --plan
+```text
+YES
 ```
 
-Apply only after reviewing the selected backup and confirming that the current files are expected. Recovery stops before changing anything if a managed destination is ambiguous or has changed unexpectedly.
+It will request the necessary privileges through `sudo`.
 
-## Package provenance
+During installation:
 
-The bundle includes four prebuilt Arch package archives. Their SHA-256 hashes are checked against `dist/dependencies/SHA256SUMS`. This detects accidental or local modification relative to the included checksum list; it does not prove publisher authenticity. The archives are unsigned in this bundle. The installer checks `LocalFileSigLevel` before the package phase and refuses to proceed if local package signatures are required; it never weakens pacman signature policy. See [docs/SECURITY-REVIEW.md](docs/SECURITY-REVIEW.md).
+- Required packages are installed through Pacman.
+- Existing managed files are backed up.
+- CyberPunk configuration files are deployed.
+- The installer may ask whether to enable SDDM at boot.
 
-## Rebuilding bundled packages
+**SDDM is not enabled automatically.**
 
-The optional dependency builder needs additional Rajdhani recipe/license inputs that are not included in this archive. See [docs/BUILD-DEPENDENCIES.md](docs/BUILD-DEPENDENCIES.md) before using it.
+If you choose Yes, the installer runs:
 
+```bash
+sudo systemctl enable sddm.service
+```
 
-## Details
+This enables SDDM for future boots. It does not start or restart the current graphical session.
 
-- You can change your distro logo (neofetch only now) using `neochange`
-  ```bash
-  neochange path/to/image
-  ```
-- You can change your wallpaper + waybar + desktop theme (based on your wallpaper) using `changewall`
-  ```bash
-  changewall path/to/image
-  ```
+### Important package note
 
+The installation may perform a full system upgrade through:
 
-## Project layout
+```bash
+sudo pacman -Syu
+```
 
-- `scripts/install.sh` — installer
-- `scripts/restore.sh` — file recovery utility
-- `scripts/recovery-state.sh` — shared protected-recovery validation
-- `scripts/bashrc-integration.sh` — reversible managed Bash prompt integration
-- `scripts/build-dependencies.sh` — optional package builder
-- `scripts/verify.sh` — static and isolated test runner
-- `payload/` — user and system theme/configuration files
-- `packages/` — required, official, and bundled package manifests
-- `dist/dependencies/` — bundled package archives and checksums
-- `tests/` — recovery-state and Bash-integration tests
-- `docs/` — operational and review documentation
+Review Pacman prompts carefully before accepting package changes.
+
+---
+
+## Safety and Validation
+
+CyberPunk includes several safeguards to reduce the risk of unintended changes.
+
+### Planning mode
+
+The default installation mode is non-destructive. It displays the planned operations without applying them.
+
+```bash
+./scripts/install.sh --plan
+```
+
+### Explicit confirmation
+
+Applying changes requires:
+
+```bash
+./scripts/install.sh --apply
+```
+
+The installer also requires the exact confirmation `YES`.
+
+### Managed file backups
+
+Before replacing managed files, the installer creates backups.
+
+The backup process covers the exact deployment destinations rather than indiscriminately copying entire system directories.
+
+### Bash configuration handling
+
+The installer manages its own designated prompt block in `.bashrc`.
+
+It preserves the remaining contents of the file and backs up the original `.bashrc` before modifying it.
+
+### Configuration deployment
+
+The included Hyprland configuration is deployed to its managed destination. It is not automatically merged with an existing customized Hyprland configuration.
+
+SDDM theme assets are copied to their designated locations.
+
+### Recovery support
+
+The recovery mechanism uses installation state and deployment records to track:
+
+- Managed file destinations.
+- Backup locations.
+- File checksums.
+- Deployment progress.
+- Restoration progress.
+- Recovery conflicts.
+
+It performs conflict checks before restoration.
+
+**Keep the generated backups until you are certain that the installation is working correctly.**
+
+### Package changes
+
+File recovery does not automatically reverse Pacman package installations or system upgrades.
+
+---
+
+## Testing Status
+
+CyberPunk has been successfully tested on the developer's own Arch Linux system, and the installation was confirmed to work in that environment.
+
+Additional source checks and isolated recovery and Bash integration tests have also been performed.
+
+However, the following have not been comprehensively tested:
+
+- Multiple clean Arch Linux installations.
+- Arch Linux derivatives.
+- Different hardware configurations.
+- Every graphics and input-device combination.
+- Every possible SDDM and Hyprland configuration.
+
+Successful testing on one system does not guarantee compatibility with every Arch Linux installation.
+
+---
+
+## Customization Tools
+
+CyberPunk includes two small customization utilities.
+
+### neochange
+
+`neochange` changes the distribution logo displayed by the terminal system-information utility.
+
+Usage:
+
+```bash
+neochange path/to/image
+```
+
+Example:
+
+```bash
+neochange ~/Pictures/my-logo.png
+```
+
+### changewall
+
+`changewall` changes the desktop wallpaper and updates the dynamic desktop and Waybar theme based on the selected wallpaper.
+
+Usage:
+
+```bash
+changewall path/to/image
+```
+
+Example:
+
+```bash
+changewall ~/Pictures/wallpaper.jpg
+```
+
+The wallpaper and theme colors are updated together to maintain a consistent desktop appearance.
+
+---
+
+## Cyber Project Collection (Don't get idea about `CS`)
+
+CyberPunk is part of a collection of independent Cyber projects.
+
+### 1. CyberPunk
+
+**Repository:** https://github.com/spoilpetal/CyberPunk
+
+The Arch Linux desktop configuration and installation project. It provides an automated way to deploy the CyberPunk Hyprland desktop environment.
+
+### 2. CyberClip Lite
+
+**Repository:** https://github.com/spoilpetal/CyberClip_lite
+
+A lightweight project in the CyberClip clipboard utility collection.
+
+### 3. CyberClip
+
+**Repository:** https://github.com/spoilpetal/CyberClip
+
+A clipboard utility project in the Cyber software collection.
+
+### 4. CyberShot
+
+**Repository:** https://github.com/zaynkhan100110/CyberShot
+
+A screenshot utility for Linux desktop environments.
+
+### 5. CyberSettings
+
+**Repository:** https://github.com/zaynkhan100110/CyberSettings
+
+A Linux system settings utility project.
+
+### 6. CyberNotes
+
+**Repository:** https://github.com/spoilpetal/CyberNotes
+
+A note-taking project in the Cyber software collection.
+
+---
+
+## Project Structure
+
+The repository is organized into separate directories for installation scripts, configuration payloads, packages, dependencies, tests, and documentation.
+
+```text
+CyberPunk/
+├── scripts/
+│   ├── install.sh
+│   └── verify.sh
+├── payload/
+│   ├── home/
+│   └── usr/
+├── packages/
+│   └── official.txt
+├── dist/
+│   └── dependencies/
+├── tests/
+├── docs/
+│   ├── RESTORE.md
+│   ├── SECURITY-REVIEW.md
+│   └── BUILD-DEPENDENCIES.md
+└── README.md
+```
+
+The exact repository contents may evolve as the project develops.
+
+---
+
+## Recovery and Documentation
+
+Additional technical documentation is available in the repository:
+
+| Document | Description |
+|---|---|
+| `docs/RESTORE.md` | Recovery and restoration instructions |
+| `docs/SECURITY-REVIEW.md` | Security review notes |
+| `docs/BUILD-DEPENDENCIES.md` | Dependency build information |
+
+Refer to these documents before performing manual recovery or modifying managed installation files.
+
+---
+
+## Package Provenance
+
+The installer uses the package definitions maintained in `packages/official.txt` and the bundled dependencies under `dist/dependencies/`.
+
+Review the package list and bundled dependency files before installation.
+
+Some bundled package build inputs may not be included in the repository. For example, the Rajdhani package recipe and its original license inputs are not currently provided as a complete reproducible build source.
+
+---
+
+## Disclaimer
+
+CyberPunk is currently a beta project.
+
+It has been tested successfully on the developer's own Arch Linux system. However, compatibility with other installations, hardware, and Arch-based distributions is not guaranteed.
+
+The installer modifies system and user configuration files. Read the installation plan, understand the destinations, and retain backups before applying changes.
+
+**Use it only on a fresh Arch Linux installation.**
+
+---
+
+## License
+
+See the repository's license file for licensing information.
