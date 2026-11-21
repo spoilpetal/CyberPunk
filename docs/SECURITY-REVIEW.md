@@ -15,14 +15,6 @@
 - SDDM boot enablement is an explicit `--apply` opt-in. The default/No choice leaves the current service state unchanged; Yes runs `systemctl enable sddm.service` after file deployment. The installer does not start, restart, or disable SDDM. It does not alter disk or partition state.
 - The user portal preference file selects GTK for generic/file-chooser portals and Hyprland for screenshot/screencast. Hyprland sets desktop/session environment variables before compositor initialization.
 
-## Checks performed in this review environment
-
-The `scripts/verify.sh` runner checks shell syntax, executable modes, manifest consistency, bundled archive checksums, payload file types, key configuration paths, and the isolated recovery/Bash integration test suites. These checks are repeatable and read-only with respect to the host system.
-
-## Package archives and supply chain
-
-The four bundled package archives are unsigned. `SHA256SUMS` is stored beside the archives and is not a detached signature. Replacing both an archive and its checksum file would not be detected. Obtain trusted package signatures or independently rebuild packages before treating them as publisher-authenticated.
-
 The dependency builder executes PKGBUILD code through `makepkg`. Inspect recipes and sources before use. A matching local fingerprint establishes byte-for-byte correspondence with the pinned fingerprint, not publisher identity.
 
 ## Installation and recovery limits
@@ -48,4 +40,3 @@ The supplied Hyprland configuration requires the Lua configuration interface int
 - SDDM theme rendering and boot/login behavior on the target hardware.
 - Interrupted package, deployment, automatic rollback, and manual restore scenarios on a disposable system.
 
-The current archive has not been installed on a clean machine or validated against the user's hardware. Passing static tests is not a guarantee of runtime readiness.
